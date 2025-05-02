@@ -1,0 +1,71 @@
+📋 Yapılacaklar Listesi:
+
+1. Proje Kurulumu ve Temel Yapılandırma
+   [✓] Next.js projesinin oluşturulması
+   [✓] Klasör yapısının düzenlenmesi
+   [✓] Klasik CSS yapısının kurulması
+   [ ] Git repositorysinin oluşturulması
+   [ ] .gitignore dosyasının düzenlenmesi
+
+2. Veritabanı ve ORM Kurulumu
+   [ ] MySQL veritabanının kurulumu
+   [ ] Prisma kurulumu
+   [ ] Veritabanı şemalarının oluşturulması (schema.prisma)
+   [ ] İlk migration'ın gerçekleştirilmesi
+
+3. Kimlik Doğrulama Sistemi
+   [ ] NextAuth.js kurulumu
+   [ ] Giriş/kayıt sayfalarının oluşturulması
+   [ ] Admin yetkilendirme sisteminin kurulması
+   [ ] Oturum yönetimi ve güvenlik ayarları
+
+4. API Rotalarının Oluşturulması
+   [ ] Servis talepleri için API endpoint'leri
+   [ ] Kullanıcı işlemleri için API endpoint'leri
+   [ ] Blog yönetimi için API endpoint'leri
+   [ ] Hizmet yönetimi için API endpoint'leri
+   [ ] Admin işlemleri için API endpoint'leri
+
+5. Sayfa Yapılarının Tasarımı ve Geliştirilmesi
+   [ ] Global CSS değişkenlerinin tanımlanması (renkler, fontlar, boşluklar vb.)
+   [ ] Ortak kullanılacak bileşenlerin tasarımı ve kodlanması (header, footer, butonlar vb.)
+   [ ] Ana sayfa tasarımı ve responsive kodlaması
+   [ ] Hizmetler sayfası tasarımı ve responsive kodlaması
+   [ ] Blog sayfası tasarımı ve responsive kodlaması
+   [ ] İletişim sayfası tasarımı ve responsive kodlaması
+   [ ] Hakkımızda sayfası tasarımı ve responsive kodlaması
+   [ ] Servis talebi formu tasarımı ve responsive kodlaması
+   [ ] Servis takip sayfası tasarımı ve responsive kodlaması
+   [ ] Tüm sayfaların mobil uyumluluğunun sağlanması
+   [ ] Cross-browser test ve düzenlemeler
+
+6. Admin Panel Geliştirmesi
+   [ ] Admin dashboard ana sayfası tasarımı ve kodlaması
+   [ ] Servis talepleri yönetim paneli tasarımı ve kodlaması
+   [ ] Blog yazıları yönetim paneli tasarımı ve kodlaması
+   [ ] Hizmetler yönetim paneli tasarımı ve kodlaması
+   [ ] Kullanıcı yönetim paneli tasarımı ve kodlaması
+
+7. Servis Takip Sistemi
+   [ ] Servis talep formu geliştirmesi
+   [ ] Takip kodu sistemi
+   [ ] Servis durumu güncelleme sistemi
+   [ ] Müşteri bilgilendirme sistemi
+
+8. İçerik Yönetimi
+   [ ] Blog sistemi
+   [ ] Hizmet içerikleri yönetimi
+   [ ] Sayfa içeriklerinin yönetimi
+   [ ] Görsel yükleme ve yönetim sistemi
+
+9. Test ve Optimizasyon
+   [ ] API testleri
+   [ ] Kullanıcı arayüzü testleri
+   [ ] Performans optimizasyonu
+   [ ] SEO optimizasyonu
+
+10. Deployment ve Yayına Alma
+    [ ] Vercel deployment konfigürasyonu
+    [ ] MySQL veritabanı hosting ayarları
+    [ ] Domain ve SSL ayarları
+    [ ] Son kontroller ve canlıya alma 
