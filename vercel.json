@@ -1,12 +1,12 @@
 {
-  "buildCommand": "prisma generate && npm run build",
-  "installCommand": "npm install && prisma generate",
+  "buildCommand": "npm run vercel-build",
+  "installCommand": "npm install",
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 60
     }
   },
   "env": {
-    "PRISMA_GENERATE_DATAPROXY": "true"
+    "SKIP_ENV_VALIDATION": "true"
   }
 } 
