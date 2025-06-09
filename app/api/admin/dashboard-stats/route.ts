@@ -13,13 +13,36 @@ export async function GET() {
       return new NextResponse('Bu işlem için admin yetkisi gerekiyor', { status: 403 });
     }
 
-    // Servis talepleri sayısı
-    const totalServiceRequests = await prisma.serviceRequest.count();
+    // Kayıtlı servis talepleri sayısı
+    const registeredServiceRequests = await prisma.serviceRequest.count();
     
-    // Bekleyen servis talepleri
-    const pendingServiceRequests = await prisma.serviceRequest.count({
+    // Anonim servis talepleri sayısı (güvenli try-catch ile)
+    let anonymousServiceRequests = 0;
+    try {
+      anonymousServiceRequests = await prisma.anonymousServiceRequest.count();
+    } catch (error) {
+      console.log('Anonim servis talepleri sayılamadı:', error);
+    }
+    
+    // Toplam servis talepleri
+    const totalServiceRequests = registeredServiceRequests + anonymousServiceRequests;
+    
+    // Bekleyen kayıtlı servis talepleri
+    const pendingRegistered = await prisma.serviceRequest.count({
       where: { status: 'PENDING' }
     });
+    
+    // Bekleyen anonim servis talepleri (güvenli try-catch ile)
+    let pendingAnonymous = 0;
+    try {
+      pendingAnonymous = await prisma.anonymousServiceRequest.count({
+        where: { status: 'PENDING' }
+      });
+    } catch (error) {
+      console.log('Bekleyen anonim servis talepleri sayılamadı:', error);
+    }
+    
+    const pendingServiceRequests = pendingRegistered + pendingAnonymous;
     
     // Toplam kullanıcı sayısı
     const totalUsers = await prisma.user.count();
@@ -91,7 +114,7 @@ export async function GET() {
       take: 5
     });
 
-    // 4. Son servis talepleri
+    // 4. Son servis talepleri (kayıtlı kullanıcılar)
     const latestServiceRequests = await prisma.serviceRequest.findMany({
       select: {
         id: true,
@@ -111,8 +134,32 @@ export async function GET() {
       orderBy: {
         createdAt: 'desc'
       },
-      take: 5
+      take: 3
     });
+
+    // 5. Son anonim servis talepleri (güvenli try-catch ile)
+    let latestAnonymousRequests: any[] = [];
+    try {
+      latestAnonymousRequests = await prisma.anonymousServiceRequest.findMany({
+        select: {
+          id: true,
+          deviceType: true,
+          brand: true,
+          model: true,
+          status: true,
+          trackingCode: true,
+          name: true,
+          email: true,
+          createdAt: true
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+        take: 2
+      });
+    } catch (error) {
+      console.log('Anonim servis talepleri getirilemedi:', error);
+    }
 
     // Tüm aktiviteleri birleştir ve tarihe göre sırala
     const recentActivities = [
@@ -143,8 +190,18 @@ export async function GET() {
         id: request.id,
         type: 'service',
         title: `${request.deviceType} - ${request.brand} ${request.model}`,
-        username: request.user.username,
-        email: request.user.email,
+        username: request.user?.username || 'Anonim',
+        email: request.user?.email || '',
+        status: request.status,
+        trackingCode: request.trackingCode,
+        createdAt: request.createdAt
+      })),
+      ...latestAnonymousRequests.map(request => ({
+        id: request.id,
+        type: 'service',
+        title: `${request.deviceType} - ${request.brand} ${request.model}`,
+        username: request.name || 'Anonim',
+        email: request.email || '',
         status: request.status,
         trackingCode: request.trackingCode,
         createdAt: request.createdAt
