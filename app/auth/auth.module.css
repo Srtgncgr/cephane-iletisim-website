@@ -1,0 +1,110 @@
+.authContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-6);
+  background-color: var(--color-gray-50);
+  width: 100%;
+}
+
+.authCard {
+  background: var(--color-white);
+  padding: var(--spacing-8);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.authTitle {
+  font-size: var(--font-size-2xl);
+  color: var(--color-gray-900);
+  text-align: center;
+  margin-bottom: var(--spacing-6);
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.formGroup label {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-700);
+  font-weight: 500;
+}
+
+.formGroup input {
+  padding: var(--spacing-3);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-base);
+  transition: all 0.3s ease;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+.submitButton {
+  background-color: var(--color-gold);
+  color: var(--color-white);
+  padding: var(--spacing-3) var(--spacing-4);
+  border: none;
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: var(--spacing-4);
+  width: 100%;
+}
+
+.errorMessage {
+  background-color: var(--color-red-50);
+  color: var(--color-red-600);
+  padding: var(--spacing-3);
+  border-radius: var(--border-radius-base);
+  margin-bottom: var(--spacing-4);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.authLinks {
+  margin-top: var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  text-align: center;
+}
+
+.authLinks a {
+  color: var(--color-gray-600);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: color 0.3s ease;
+}
+
+.authLinks a:hover {
+  color: var(--color-gold);
+}
+
+@media (max-width: 640px) {
+  .authCard {
+    padding: var(--spacing-6);
+  }
+
+  .authTitle {
+    font-size: var(--font-size-xl);
+  }
+} 

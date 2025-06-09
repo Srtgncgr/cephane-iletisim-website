@@ -1,0 +1,350 @@
+.servicesAdminContainer {
+  padding: 20px;
+  width: 100%;
+}
+
+.actionBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.createButton {
+  background-color: #d4af37;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.createButton:hover {
+  background-color: #b8960b;
+}
+
+.createButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+}
+
+.searchBox input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 250px;
+}
+
+.activeFilter select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+/* Form Stilleri */
+.serviceForm {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.formHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.formHeader h2 {
+  margin: 0;
+  color: #333;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.closeButton:hover {
+  color: #000;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.formRow {
+  display: flex;
+  gap: 20px;
+}
+
+.formRow .formGroup {
+  flex: 1;
+}
+
+.formCheckbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.formCheckbox input {
+  margin-right: 10px;
+}
+
+.formActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.saveButton {
+  background-color: #d4af37;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.saveButton:hover {
+  background-color: #b8960b;
+}
+
+.cancelButton {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancelButton:hover {
+  background-color: #e5e5e5;
+}
+
+/* Hizmetler Listesi */
+.servicesList {
+  margin-top: 20px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.noServices {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.serviceCard {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.serviceCard:hover {
+  transform: translateY(-3px);
+}
+
+.serviceHeader {
+  position: relative;
+}
+
+.serviceImage {
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+}
+
+.serviceTitle {
+  padding: 15px;
+  margin: 0;
+  font-size: 18px;
+  border-bottom: 1px solid #eee;
+}
+
+.serviceStatus {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.active {
+  background-color: #d4f7d4;
+  color: #2c7a2c;
+}
+
+.inactive {
+  background-color: #f7d4d4;
+  color: #7a2c2c;
+}
+
+.serviceContent {
+  padding: 15px;
+}
+
+.serviceDescription {
+  margin-top: 0;
+  color: #666;
+}
+
+.servicePrice {
+  margin: 10px 0;
+  font-weight: bold;
+  color: #d4af37;
+}
+
+.serviceFeatures {
+  margin-top: 15px;
+}
+
+.serviceFeatures h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+.serviceFeatures ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.serviceFeatures li {
+  margin-bottom: 3px;
+  font-size: 13px;
+  color: #666;
+}
+
+.serviceActions {
+  display: flex;
+  padding: 15px;
+  border-top: 1px solid #eee;
+  gap: 10px;
+}
+
+.editButton, .toggleButton, .deleteButton {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.editButton {
+  background-color: #d4af37;
+  color: #000;
+}
+
+.editButton:hover {
+  background-color: #b8960b;
+}
+
+.toggleButton {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.deactivateButton {
+  background-color: #f0f0f0;
+  color: #7a2c2c;
+}
+
+.deactivateButton:hover {
+  background-color: #ebebeb;
+}
+
+.activateButton {
+  background-color: #f0f0f0;
+  color: #2c7a2c;
+}
+
+.activateButton:hover {
+  background-color: #ebebeb;
+}
+
+.deleteButton {
+  background-color: #f7d4d4;
+  color: #7a2c2c;
+}
+
+.deleteButton:hover {
+  background-color: #f0c0c0;
+}
+
+/* Responsive tasarım */
+@media (max-width: 768px) {
+  .actionBar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .filters {
+    flex-direction: column;
+  }
+  
+  .formRow {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .serviceActions {
+    flex-direction: column;
+  }
+} 

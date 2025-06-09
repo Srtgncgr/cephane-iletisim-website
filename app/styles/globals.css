@@ -36,6 +36,9 @@
   --border-radius-sm: 0.25rem;
   --border-radius-md: 0.5rem;
   --border-radius-lg: 1rem;
+
+  /* Primary color dark variant */
+  --primary-color-dark: #0056b3;
 }
 
 * {
@@ -117,4 +120,6 @@ a:hover {
   html {
     font-size: 14px;
   }
-} 
+}
+
+@import './auth.css'; 

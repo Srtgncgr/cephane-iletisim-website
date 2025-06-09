@@ -1,0 +1,144 @@
+.whyUs {
+    padding: var(--spacing-16) 0;
+    background-color: var(--color-white);
+    position: relative;
+}
+
+.whyUsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-4);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-8);
+    align-items: center;
+}
+
+.whyUsContent {
+    padding-right: var(--spacing-8);
+}
+
+.whyUsTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-4);
+    position: relative;
+    display: inline-block;
+}
+
+.whyUsTitle::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--color-gold);
+}
+
+.whyUsSubtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-600);
+    margin-bottom: var(--spacing-8);
+    max-width: 500px;
+}
+
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-6);
+}
+
+.featureCard {
+    display: flex;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4);
+    background: var(--color-white);
+    border-radius: var(--border-radius-base);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.featureCard:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.featureIconWrapper {
+    flex-shrink: 0;
+}
+
+.featureIconWrapper svg {
+    font-size: 1.8rem;
+    color: var(--color-gold);
+}
+
+.featureContent {
+    flex-grow: 1;
+}
+
+.featureTitle {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-2);
+}
+
+.featureDescription {
+    font-size: var(--font-size-base);
+    color: var(--color-gray-600);
+    line-height: 1.5;
+}
+
+.whyUsImage {
+    position: relative;
+    width: 85%;
+    height: 85%;
+    min-height: 500px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+@media (max-width: 1024px) {
+    .whyUsContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .whyUsContent {
+        padding-right: 0;
+    }
+
+    .whyUsImage {
+        min-height: 400px;
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .whyUs {
+        padding: var(--spacing-8) 0;
+    }
+
+    .whyUsTitle {
+        font-size: 2rem;
+    }
+
+    .whyUsSubtitle {
+        font-size: var(--font-size-base);
+    }
+
+    .featuresGrid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-4);
+    }
+
+    .featureCard {
+        padding: var(--spacing-3);
+    }
+
+    .whyUsImage {
+        min-height: 300px;
+    }
+} 

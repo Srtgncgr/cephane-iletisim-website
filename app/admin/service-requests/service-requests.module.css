@@ -1,0 +1,478 @@
+.serviceRequestsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchBox input {
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 6px;
+  width: 300px;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.searchBox input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+}
+
+.statusFilter select {
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 6px;
+  width: 200px;
+  font-size: 0.9rem;
+  background-color: white;
+  transition: all 0.3s;
+}
+
+.statusFilter select:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.noRequests {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.requestsWrapper {
+  display: flex;
+  gap: 1.5rem;
+  min-height: 500px;
+}
+
+.requestsList {
+  flex: 1;
+  min-width: 0;
+}
+
+.requestsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.requestsTable th {
+  background-color: #1a1a1a;
+  color: white;
+  text-align: left;
+  padding: 1rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.requestsTable th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.requestsTable th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.requestsTable td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.requestsTable tr {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.requestsTable tr:hover {
+  background-color: rgba(212, 175, 55, 0.05);
+}
+
+.requestsTable tr:last-child td {
+  border-bottom: none;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.statusPending {
+  background-color: #fff8dd;
+  color: #b59618;
+}
+
+.statusApproved {
+  background-color: #fff0dd;
+  color: #e39e0a;
+}
+
+.statusInProgress {
+  background-color: #e6f7ff;
+  color: #0a88e3;
+}
+
+.statusCompleted {
+  background-color: #e6fff1;
+  color: #0ab447;
+}
+
+.statusRejected {
+  background-color: #ffe6e6;
+  color: #e30a0a;
+}
+
+.statusCancelled {
+  background-color: #ffe6e6;
+  color: #e30a0a;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.viewButton {
+  background-color: #1a1a1a;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s;
+}
+
+.viewButton:hover {
+  background-color: var(--color-gold);
+}
+
+.requestDetail {
+  width: 400px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  overflow: auto;
+  max-height: 700px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.requestDetailHeader {
+  padding: 1.2rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+}
+
+.requestDetailHeader h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  color: #333;
+}
+
+.requestInfo {
+  padding: 1.2rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.infoItem {
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.infoItem:last-child {
+  margin-bottom: 0;
+}
+
+.infoItem strong {
+  min-width: 120px;
+  display: inline-block;
+  color: #666;
+}
+
+.requestDescription {
+  padding: 1.2rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.requestDescription h3 {
+  margin: 0 0 0.7rem 0;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.requestDescription p {
+  margin: 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.requestActions {
+  padding: 1.2rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.requestActions h3 {
+  margin: 0 0 0.7rem 0;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.statusButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+}
+
+.statusButton {
+  padding: 0.6rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.statusButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pendingButton {
+  background-color: #fff8dd;
+  color: #b59618;
+}
+
+.pendingButton:hover:not(:disabled) {
+  background-color: #ffec99;
+}
+
+.approvedButton {
+  background-color: #fff0dd;
+  color: #e39e0a;
+}
+
+.approvedButton:hover:not(:disabled) {
+  background-color: #ffe099;
+}
+
+.inProgressButton {
+  background-color: #e6f7ff;
+  color: #0a88e3;
+}
+
+.inProgressButton:hover:not(:disabled) {
+  background-color: #bde6ff;
+}
+
+.completedButton {
+  background-color: #e6fff1;
+  color: #0ab447;
+}
+
+.completedButton:hover:not(:disabled) {
+  background-color: #bdf7d5;
+}
+
+.rejectedButton {
+  background-color: #ffe6e6;
+  color: #e30a0a;
+}
+
+.rejectedButton:hover:not(:disabled) {
+  background-color: #ffcccc;
+}
+
+.cancelledButton {
+  background-color: #ffe6e6;
+  color: #e30a0a;
+}
+
+.cancelledButton:hover:not(:disabled) {
+  background-color: #ffcccc;
+}
+
+.dangerZone {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.deleteButton {
+  background-color: #ffe6e6;
+  color: #e30a0a;
+  border: none;
+  padding: 0.7rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+}
+
+.deleteButton:hover {
+  background-color: #ffc0c0;
+}
+
+.statusUpdateForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.statusNoteField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statusNoteField label {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.statusNoteField textarea {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 6px;
+  resize: vertical;
+  font-size: 0.9rem;
+  min-height: 80px;
+}
+
+.statusNoteField textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+}
+
+.statusHistory {
+  padding: 1.2rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.statusUpdates {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.statusUpdate {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.statusUpdateHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.statusDate {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.statusNote {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(212, 175, 55, 0.2);
+  font-size: 0.9rem;
+  color: #555;
+  white-space: pre-line;
+}
+
+@media (max-width: 1000px) {
+  .requestsWrapper {
+    flex-direction: column;
+  }
+
+  .requestDetail {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .searchBox input,
+  .statusFilter select {
+    width: 100%;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .requestsTable {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .statusButtons {
+    grid-template-columns: 1fr;
+  }
+} 

@@ -1,0 +1,185 @@
+.header {
+  background: linear-gradient(to right, rgba(0, 0, 0, 1) 20%, rgba(26, 26, 26, 1) 100%);
+  padding: var(--spacing-3) 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 2px solid var(--color-gold);
+}
+
+.headerContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  position: relative;
+  padding: var(--spacing-2) 0;
+}
+
+.logoText {
+  color: var(--color-gold);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+}
+
+.navMenu {
+  display: flex;
+  gap: var(--spacing-6);
+  align-items: center;
+}
+
+.navLink {
+  color: var(--color-white);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  padding: var(--spacing-2) var(--spacing-3);
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.navLink:hover {
+  color: var(--color-gold);
+}
+
+.navLink::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to right, transparent, var(--color-gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.navLink:hover::before {
+  transform: scaleX(1);
+}
+
+.userMenu {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.loginBtn, .profileBtn {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-gold);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.loginBtn::before, .profileBtn::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-gold);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.loginBtn:hover::before, .profileBtn:hover::before {
+  transform: translateX(0);
+}
+
+.registerBtn, .logoutBtn {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-gold);
+  color: var(--color-black);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.08);
+  z-index: 1;
+}
+
+.mobileMenuButton {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-gold);
+  font-size: var(--font-size-2xl);
+  cursor: pointer;
+  padding: var(--spacing-2);
+}
+
+/* Responsive tasarım */
+@media (max-width: 768px) {
+  .header {
+    padding: var(--spacing-3) 0;
+  }
+
+  .headerContainer {
+    padding: 0 var(--spacing-4);
+  }
+
+  .mobileMenuButton {
+    display: block;
+  }
+
+  .navMenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, rgba(26, 26, 26, 1) 100%);
+    flex-direction: column;
+    padding: var(--spacing-4);
+    gap: var(--spacing-3);
+    border-bottom: 1px solid var(--color-gold);
+  }
+
+  .navMenu.active {
+    display: flex;
+  }
+
+  .navLink {
+    width: 100%;
+    text-align: center;
+    padding: var(--spacing-3);
+  }
+
+  .navLink::before {
+    display: none;
+  }
+
+  .userMenu {
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+  }
+} 

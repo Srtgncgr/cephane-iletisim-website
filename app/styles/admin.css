@@ -1,0 +1,111 @@
+.admin-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+}
+
+.admin-nav {
+  background-color: var(--dark-color);
+  color: var(--text-light);
+  padding: 1rem;
+}
+
+.admin-nav-content {
+  position: fixed;
+  width: 250px;
+}
+
+.admin-nav-brand {
+  padding: 1rem;
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+}
+
+.admin-nav-brand a {
+  color: var(--text-light);
+  text-decoration: none;
+}
+
+.admin-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.admin-nav-links li {
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s;
+}
+
+.admin-nav-links li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-nav-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  display: block;
+}
+
+.admin-main {
+  padding: 2rem;
+  background-color: var(--bg-secondary);
+}
+
+/* Admin dashboard kartları */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: var(--bg-primary);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3 {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.stat-card .value {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+/* Admin tablo stilleri */
+.admin-table {
+  width: 100%;
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.admin-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--bg-secondary);
+}
+
+.admin-table th {
+  background-color: var(--bg-secondary);
+  font-weight: 500;
+}
+
+.admin-table tr:hover {
+  background-color: var(--bg-secondary);
+} 
