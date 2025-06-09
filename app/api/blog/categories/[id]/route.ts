@@ -6,11 +6,12 @@ import { authOptions } from '@/app/lib/auth';
 // Kategori detayı
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const category = await prisma.blogCategory.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: {
         id: true,
         name: true,
@@ -26,7 +27,7 @@ export async function GET(
             author: {
               select: {
                 id: true,
-                name: true
+                username: true
               }
             }
           },
@@ -54,9 +55,10 @@ export async function GET(
 // Kategori güncelleme (Sadece admin)
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'ADMIN') {
       return new NextResponse('Bu işlem için admin yetkisi gerekiyor', { status: 403 });
@@ -74,7 +76,7 @@ export async function PATCH(
       where: {
         slug,
         NOT: {
-          id: params.id
+          id
         }
       }
     });
@@ -85,7 +87,7 @@ export async function PATCH(
 
     // Kategoriyi güncelle
     const category = await prisma.blogCategory.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         name,
         slug
@@ -107,16 +109,17 @@ export async function PATCH(
 // Kategori silme (Sadece admin)
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'ADMIN') {
       return new NextResponse('Bu işlem için admin yetkisi gerekiyor', { status: 403 });
     }
 
     const category = await prisma.blogCategory.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         _count: {
           select: {
@@ -136,7 +139,7 @@ export async function DELETE(
     }
 
     await prisma.blogCategory.delete({
-      where: { id: params.id }
+      where: { id }
     });
 
     return new NextResponse(null, { status: 204 });

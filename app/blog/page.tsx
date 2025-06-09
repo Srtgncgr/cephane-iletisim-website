@@ -2,6 +2,20 @@ import styles from './blog.module.css';
 import BlogList from './components/BlogList';
 import { prisma } from '@/app/lib/prisma';
 
+// Tarihi tutarlı bir şekilde formatlamak için yardımcı fonksiyon
+function formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  
+  const monthNames = [
+    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+  ];
+  
+  return `${day} ${monthNames[month - 1]} ${year}`;
+}
+
 // Blog yazılarını veritabanından getiren sunucu komponenti
 async function getBlogPosts() {
   try {
@@ -27,11 +41,7 @@ async function getBlogPosts() {
       excerpt: post.excerpt || '',
       slug: post.slug,
       author: post.author?.username || 'Admin',
-      date: new Date(post.createdAt).toLocaleDateString('tr-TR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      }),
+      date: formatDate(new Date(post.createdAt)),
       category: post.category?.name || 'Genel',
       image: post.imageUrl || '/blog/default.jpg'
     }));

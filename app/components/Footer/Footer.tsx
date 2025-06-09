@@ -1,16 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './Footer.module.css';
 import Link from 'next/link';
 import { FaFacebook, FaTwitter, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
-  const [currentYear, setCurrentYear] = useState('');
-
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear().toString());
-  }, []);
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className={styles.footer}>
@@ -38,9 +34,8 @@ const Footer = () => {
         <div className={styles['footer-section']}>
           <h3>İletişim</h3>
           <div className={styles['contact-info']}>
-            <p><FaPhone /> +90 (555) 123 45 67</p>
-            <p><FaEnvelope /> info@teknikservis.com</p>
-            <p><FaMapMarkerAlt /> Merkez Mahallesi, Teknik Servis Sokak No:1, İstanbul</p>
+            <p><FaPhone /> +90 (551) 057 55 55</p>
+            <p><FaMapMarkerAlt /> Çilhane, Belediye Cd. No:6, 55400 Bafra/Samsun</p>
           </div>
         </div>
       </div>

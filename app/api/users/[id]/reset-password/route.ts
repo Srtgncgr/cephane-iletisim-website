@@ -7,56 +7,47 @@ import { authOptions } from '@/app/lib/auth';
 // Kullanıcı şifresini sıfırlama (Sadece admin veya kendisi)
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Params değerlerini hemen kullanmak için yerel değişkenlere aktaralım
-    const userId = params.id;
-    
+    const { id } = await params;
     const session = await getServerSession(authOptions);
-    if (!session) {
-      return new NextResponse('Oturum açmanız gerekiyor', { status: 401 });
-    }
-
-    // Kullanıcı kendi şifresini veya admin tüm kullanıcıların şifresini sıfırlayabilir
-    if (session.user.role !== 'ADMIN' && session.user.id !== userId) {
-      return new NextResponse('Bu işlem için yetkiniz yok', { status: 403 });
+    
+    if (!session || session.user.role !== 'ADMIN') {
+      return new NextResponse('Bu işlem için admin yetkisi gerekiyor', { status: 403 });
     }
 
     const { password } = await request.json();
-    
-    // Şifre kontrolü
-    if (!password) {
-      return new NextResponse('Şifre gereklidir', { status: 400 });
-    }
 
-    if (password.length < 6) {
+    if (!password || password.length < 6) {
       return new NextResponse('Şifre en az 6 karakter olmalıdır', { status: 400 });
     }
 
-    // Kullanıcının varlığını kontrol et
+    // Kendi hesabının şifresini bu şekilde sıfırlayamaz
+    if (session.user.id === id) {
+      return new NextResponse('Kendi şifrenizi bu şekilde sıfırlayamazsınız', { status: 400 });
+    }
+
     const user = await prisma.user.findUnique({
-      where: { id: userId }
+      where: { id },
+      select: { id: true, username: true, email: true }
     });
 
     if (!user) {
       return new NextResponse('Kullanıcı bulunamadı', { status: 404 });
     }
 
-    // Şifreyi hashle
     const hashedPassword = await hash(password, 12);
 
-    // Şifreyi güncelle
     await prisma.user.update({
-      where: { id: userId },
-      data: { password: hashedPassword }
+      where: { id },
+      data: {
+        password: hashedPassword
+      }
     });
 
-    return new NextResponse(JSON.stringify({ message: 'Şifre başarıyla sıfırlandı' }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    return NextResponse.json({
+      message: `${user.username} kullanıcısının şifresi başarıyla sıfırlandı`
     });
   } catch (error) {
     console.error('Şifre sıfırlama hatası:', error);

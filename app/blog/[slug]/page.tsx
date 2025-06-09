@@ -4,6 +4,20 @@ import Link from 'next/link';
 import { prisma } from '@/app/lib/prisma';
 import styles from './blogDetail.module.css';
 
+// Tarihi tutarlı bir şekilde formatlamak için yardımcı fonksiyon
+function formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  
+  const monthNames = [
+    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+  ];
+  
+  return `${day} ${monthNames[month - 1]} ${year}`;
+}
+
 // Blog yazısı getirme
 async function getBlogPost(slug: string) {
   try {
@@ -29,11 +43,7 @@ async function getBlogPost(slug: string) {
       excerpt: post.excerpt || '',
       slug: post.slug,
       author: post.author?.username || 'Admin',
-      date: new Date(post.createdAt).toLocaleDateString('tr-TR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      }),
+      date: formatDate(new Date(post.createdAt)),
       category: post.category?.name || 'Genel',
       imageUrl: post.imageUrl || '/blog/default.jpg'
     };
@@ -58,8 +68,9 @@ async function getBlogCategories() {
   }
 }
 
-export default async function BlogDetailPage({ params }: { params: { slug: string } }) {
-  const post = await getBlogPost(params.slug);
+export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
   const categories = await getBlogCategories();
   
   if (!post) {
@@ -120,6 +131,16 @@ export default async function BlogDetailPage({ params }: { params: { slug: strin
                   </li>
                 ))}
               </ul>
+            </div>
+            
+            <div className={styles.sidebarWidget}>
+              <h3>Yardıma mı İhtiyacınız Var?</h3>
+              <div className={styles.contactWidget}>
+                <p>Bu konuda sorununuz varsa bizimle iletişime geçin.</p>
+                <Link href="/iletisim" className={styles.contactButton}>
+                  İletişime Geç
+                </Link>
+              </div>
             </div>
           </div>
         </div>

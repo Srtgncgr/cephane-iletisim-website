@@ -31,7 +31,7 @@ export async function PATCH(request: Request) {
       select: {
         id: true,
         email: true,
-        name: true,
+        username: true,
         role: true
       }
     });

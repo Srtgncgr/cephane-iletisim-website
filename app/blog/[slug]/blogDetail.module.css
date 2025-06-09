@@ -67,7 +67,7 @@
 
 .categoryTag {
   display: inline-block;
-  background-color: #4f46e5;
+  background-color: #d4af37;
   color: white;
   padding: 5px 10px;
   border-radius: 4px;
@@ -98,7 +98,7 @@
 
 .blogExcerpt {
   background-color: #f9fafb;
-  border-left: 4px solid #4f46e5;
+  border-left: 4px solid #d4af37;
   padding: 20px;
   margin-bottom: 30px;
   font-size: 18px;
@@ -150,7 +150,7 @@
 }
 
 .blogText blockquote {
-  border-left: 4px solid #4f46e5;
+  border-left: 4px solid #d4af37;
   padding: 15px 20px;
   margin: 20px 0;
   background-color: #f9fafb;
@@ -199,8 +199,35 @@
 
 .categoryList a:hover {
   background-color: #f9fafb;
-  color: #4f46e5;
+  color: #d4af37;
   padding-left: 10px;
+}
+
+.contactWidget {
+  text-align: center;
+}
+
+.contactWidget p {
+  color: #6b7280;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.contactButton {
+  display: inline-block;
+  background-color: #d4af37;
+  color: white;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.contactButton:hover {
+  background-color: #b8941f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
 }
 
 @media (max-width: 768px) {

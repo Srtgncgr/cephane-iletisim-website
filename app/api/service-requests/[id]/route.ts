@@ -34,193 +34,168 @@ const determineRecordType = async (id: string) => {
   return { type: 'unknown', record: null };
 };
 
-// Servis talebi detaylarını getirme
+// Servis talebi detayı
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
+    
     if (!session) {
       return new NextResponse('Oturum açmanız gerekiyor', { status: 401 });
     }
 
-    const { type, record } = await determineRecordType(params.id);
-    
-    if (type === 'unknown' || !record) {
+    const serviceRequest = await prisma.serviceRequest.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true
+          }
+        },
+        statusUpdates: {
+          orderBy: {
+            createdAt: 'desc'
+          },
+          select: {
+            id: true,
+            status: true,
+            note: true,
+            createdAt: true
+          }
+        }
+      }
+    });
+
+    if (!serviceRequest) {
       return new NextResponse('Servis talebi bulunamadı', { status: 404 });
     }
 
-    if (type === 'registered') {
-      // Normal servis talebi için detayları getir
-      const serviceRequest = await prisma.serviceRequest.findUnique({
-        where: { id: params.id },
-        include: {
-          user: {
-            select: {
-              username: true,
-              email: true
-            }
-          },
-          statusUpdates: {
-            orderBy: {
-              createdAt: 'desc'
-            },
-            include: {
-              serviceRequest: true
-            }
-          }
-        }
-      });
-
-      if (!serviceRequest) {
-        return new NextResponse('Servis talebi bulunamadı', { status: 404 });
-      }
-
-      // Kullanıcı yetkisi kontrolü
-      if (session.user.role !== 'ADMIN' && serviceRequest.userId !== session.user.id) {
-        return new NextResponse('Bu işlem için yetkiniz yok', { status: 403 });
-      }
-
-      return NextResponse.json({
-        ...serviceRequest,
-        type: 'registered'
-      });
-    } else {
-      // Anonim servis talebi için sadece admin erişebilir
-      if (session.user.role !== 'ADMIN') {
-        return new NextResponse('Bu işlem için yetkiniz yok', { status: 403 });
-      }
-
-      // SQL ile tam detayları getir
-      const sqlQuery = `
-        SELECT * FROM AnonymousServiceRequest
-        WHERE id = '${params.id}'
-        LIMIT 1
-      `;
-      
-      const anonymousResults = await prisma.$queryRawUnsafe(sqlQuery);
-      
-      if (!Array.isArray(anonymousResults) || anonymousResults.length === 0) {
-        return new NextResponse('Servis talebi bulunamadı', { status: 404 });
-      }
-
-      return NextResponse.json({
-        ...anonymousResults[0],
-        type: 'anonymous',
-        statusUpdates: [] // Şimdilik boş
-      });
+    // Kullanıcı sadece kendi taleplerini veya admin tüm talepleri görebilir
+    if (session.user.role !== 'ADMIN' && serviceRequest.userId !== session.user.id) {
+      return new NextResponse('Bu talebi görme yetkiniz yok', { status: 403 });
     }
+
+    return NextResponse.json(serviceRequest);
   } catch (error) {
     console.error('Servis talebi detay hatası:', error);
     return new NextResponse('Sunucu hatası', { status: 500 });
   }
 }
 
-// Servis talebi güncelleme
+// Servis talebi güncelleme (Sadece admin)
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
-    if (!session) {
-      return new NextResponse('Oturum açmanız gerekiyor', { status: 401 });
+    
+    if (!session || session.user.role !== 'ADMIN') {
+      return new NextResponse('Bu işlem için admin yetkisi gerekiyor', { status: 403 });
     }
 
     const { status, note } = await request.json();
 
-    // Admin değilse güncelleme yapamaz
-    if (session.user.role !== 'ADMIN') {
-      return new NextResponse('Bu işlem için admin yetkisi gerekiyor', { status: 403 });
+    if (!status) {
+      return new NextResponse('Durum bilgisi gereklidir', { status: 400 });
     }
 
-    const { type, record } = await determineRecordType(params.id);
+    const validStatuses = ['PENDING', 'APPROVED', 'IN_PROGRESS', 'COMPLETED', 'REJECTED', 'CANCELLED'];
+    if (!validStatuses.includes(status)) {
+      return new NextResponse('Geçersiz durum', { status: 400 });
+    }
+
+    // Hangi tür talep olduğunu belirle
+    const { type, record } = await determineRecordType(id);
     
-    if (type === 'unknown' || !record) {
+    if (!record) {
       return new NextResponse('Servis talebi bulunamadı', { status: 404 });
     }
 
+    // Talep türüne göre güncelleme yap
     if (type === 'registered') {
-      // Normal servis talebi için durum güncellemesi
-      // Durum güncellemesi oluştur
-      const statusUpdate = await prisma.statusUpdate.create({
-        data: {
-          serviceRequestId: params.id,
-          status,
-          note
-        }
-      });
-
-      // Servis talebinin durumunu güncelle
-      const updatedServiceRequest = await prisma.serviceRequest.update({
-        where: { id: params.id },
-        data: { status },
-        include: {
-          user: {
-            select: {
-              username: true,
-              email: true
-            }
+      // Kayıtlı kullanıcı talebi güncelleme
+      const updatedRequest = await prisma.$transaction(async (prisma) => {
+        // Servis talebini güncelle
+        const updated = await prisma.serviceRequest.update({
+          where: { id },
+          data: { 
+            status,
+            updatedAt: new Date()
           },
-          statusUpdates: {
-            orderBy: {
-              createdAt: 'desc'
-            },
-            take: 1
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                email: true
+              }
+            }
           }
-        }
+        });
+
+        // Durum güncellemesi ekle
+        const statusUpdate = await prisma.statusUpdate.create({
+          data: {
+            serviceRequestId: id,
+            status,
+            note: note || '',
+            createdAt: new Date()
+          }
+        });
+
+        return { request: updated, statusUpdate };
       });
 
       return NextResponse.json({
-        serviceRequest: {
-          ...updatedServiceRequest,
-          type: 'registered'
-        },
-        statusUpdate
+        serviceRequest: updatedRequest.request,
+        statusUpdate: updatedRequest.statusUpdate
       });
-    } else {
-      // Anonim servis talebi için durum güncellemesi
+    } else if (type === 'anonymous') {
+      // Anonim kullanıcı talebi güncelleme
       try {
-        // SQL ile güncelle
         const updateQuery = `
-          UPDATE AnonymousServiceRequest
-          SET status = '${status}', updatedAt = NOW()
-          WHERE id = '${params.id}'
+          UPDATE AnonymousServiceRequest 
+          SET status = '${status}', updatedAt = NOW() 
+          WHERE id = '${id}'
         `;
         
         await prisma.$executeRawUnsafe(updateQuery);
 
-        // Güncellenmiş kaydı getir
-        const selectQuery = `
-          SELECT * FROM AnonymousServiceRequest
-          WHERE id = '${params.id}'
-          LIMIT 1
-        `;
-        
-        const anonymousResults = await prisma.$queryRawUnsafe(selectQuery);
-
-        if (!Array.isArray(anonymousResults) || anonymousResults.length === 0) {
-          return new NextResponse('Güncelleme sonrası kayıt bulunamadı', { status: 500 });
+        // Anonim talepler için de status update tablosuna kayıt eklemeyi deneyelim
+        try {
+          const statusUpdate = await prisma.statusUpdate.create({
+            data: {
+              serviceRequestId: id,
+              status,
+              note: note || '',
+              createdAt: new Date()
+            }
+          });
+          
+          return NextResponse.json({
+            serviceRequest: { ...record, status, updatedAt: new Date() },
+            statusUpdate
+          });
+        } catch (statusUpdateError) {
+          console.log('Anonim talep için status update oluşturulamadı, devam ediliyor...');
+          return NextResponse.json({
+            serviceRequest: { ...record, status, updatedAt: new Date() }
+          });
         }
-
-        return NextResponse.json({
-          serviceRequest: {
-            ...anonymousResults[0],
-            type: 'anonymous'
-          },
-          statusUpdate: {
-            id: 'anonymous-update',
-            status,
-            note,
-            createdAt: new Date().toISOString()
-          }
-        });
       } catch (error) {
         console.error('Anonim servis talebi güncelleme hatası:', error);
-        return new NextResponse('Güncelleme işlemi sırasında bir hata oluştu', { status: 500 });
+        return new NextResponse('Anonim servis talebi güncellenirken hata oluştu', { status: 500 });
       }
     }
+
+    return new NextResponse('Bilinmeyen servis talebi türü', { status: 400 });
   } catch (error) {
     console.error('Servis talebi güncelleme hatası:', error);
     return new NextResponse('Sunucu hatası', { status: 500 });
@@ -230,51 +205,33 @@ export async function PATCH(
 // Servis talebi silme (Sadece admin)
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
-    if (!session) {
-      return new NextResponse('Oturum açmanız gerekiyor', { status: 401 });
-    }
-
-    // Admin değilse silme yapamaz
-    if (session.user.role !== 'ADMIN') {
+    
+    if (!session || session.user.role !== 'ADMIN') {
       return new NextResponse('Bu işlem için admin yetkisi gerekiyor', { status: 403 });
     }
 
-    const { type, record } = await determineRecordType(params.id);
-    
-    if (type === 'unknown' || !record) {
+    const serviceRequest = await prisma.serviceRequest.findUnique({
+      where: { id }
+    });
+
+    if (!serviceRequest) {
       return new NextResponse('Servis talebi bulunamadı', { status: 404 });
     }
 
-    if (type === 'registered') {
-      // Normal servis talebi silme
-      // İlişkili kayıtları ve servis talebini sil
-      await prisma.$transaction([
-        prisma.statusUpdate.deleteMany({
-          where: { serviceRequestId: params.id }
-        }),
-        prisma.serviceRequest.delete({
-          where: { id: params.id }
-        })
-      ]);
-    } else {
-      // Anonim servis talebi silme
-      try {
-        // SQL ile sil
-        const deleteQuery = `
-          DELETE FROM AnonymousServiceRequest
-          WHERE id = '${params.id}'
-        `;
-        
-        await prisma.$executeRawUnsafe(deleteQuery);
-      } catch (error) {
-        console.error('Anonim servis talebi silme hatası:', error);
-        return new NextResponse('Silme işlemi sırasında bir hata oluştu', { status: 500 });
-      }
-    }
+    // İlişkili durum güncellemelerini de sil
+    await prisma.$transaction([
+      prisma.statusUpdate.deleteMany({
+        where: { serviceRequestId: id }
+      }),
+      prisma.serviceRequest.delete({
+        where: { id }
+      })
+    ]);
 
     return new NextResponse(null, { status: 204 });
   } catch (error) {

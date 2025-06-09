@@ -26,7 +26,7 @@ export async function GET(
         category: {
           select: {
             id: true,
-            name: true
+            slug: true
           }
         },
         author: {
@@ -95,16 +95,16 @@ export async function PATCH(
     // Slug kontrolü (sadece slug gönderilmişse ve kendi ID'si hariç)
     if (slug && slug !== existingPost.slug) {
       const slugCheck = await prisma.blogPost.findFirst({
-        where: {
-          slug,
-          NOT: {
+      where: {
+        slug,
+        NOT: {
             id
-          }
         }
-      });
+      }
+    });
 
       if (slugCheck) {
-        return new NextResponse('Bu URL adresi zaten kullanımda', { status: 400 });
+      return new NextResponse('Bu URL adresi zaten kullanımda', { status: 400 });
       }
     }
 
@@ -126,7 +126,7 @@ export async function PATCH(
         category: {
           select: {
             id: true,
-            name: true
+            slug: true
           }
         },
         author: {

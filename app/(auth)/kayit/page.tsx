@@ -39,12 +39,12 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Kayıt işlemi başarısız');
+        throw new Error(data.error || data.message || 'Kayıt işlemi başarısız');
       }
 
       router.push('/giris?registered=true');
-    } catch (error) {
-      setError('Kayıt işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+    } catch (error: any) {
+      setError(error.message || 'Kayıt işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.');
     }
   };
 

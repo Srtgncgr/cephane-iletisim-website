@@ -1,22 +1,4 @@
-/* Root header ve footerları tamamen gizle */
-:global(body > header),
-:global(body > div > header),
-:global(body > footer),
-:global(body > div > footer) {
-  display: none !important;
-}
-
-:global(body),
-:global(html) {
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-}
-
-:global(body > div) {
-  margin: 0 !important;
-  padding: 0 !important;
-}
+/* Global selectorlar artık globals.css dosyasında tanımlı */
 
 .adminContainer {
   display: flex;
@@ -441,6 +423,7 @@
   color: var(--color-black);
   margin: 0;
   background: linear-gradient(to right, var(--color-black) 0%, #444 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

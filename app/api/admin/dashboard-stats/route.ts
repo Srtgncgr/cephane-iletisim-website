@@ -4,7 +4,7 @@ import { prisma } from '@/app/lib/prisma';
 import { authOptions } from '@/app/lib/auth';
 
 // Dashboard istatistikleri için endpoint
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     

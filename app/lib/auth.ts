@@ -1,7 +1,8 @@
-import { NextAuthOptions } from 'next-auth';
+import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
-import { prisma } from './prisma';
+import { prisma } from '@/app/lib/prisma';
+import { Role } from '@/app/types/auth';
 
 // Rate limiting için basit bir implementasyon
 const loginAttempts = new Map<string, { count: number; firstAttempt: number }>();
@@ -37,33 +38,17 @@ declare module 'next-auth/jwt' {
   }
 }
 
-export const authOptions: NextAuthOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Şifre", type: "password" }
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Email ve şifre gerekli');
-        }
-
-        // Rate limiting kontrolü
-        const attempts = loginAttempts.get(credentials.email);
-        const now = Date.now();
-
-        if (attempts) {
-          // Kilitlenme süresi geçtiyse sıfırla
-          if (now - attempts.firstAttempt >= LOCKOUT_TIME) {
-            loginAttempts.delete(credentials.email);
-          }
-          // Hala kilitli ise
-          else if (attempts.count >= MAX_LOGIN_ATTEMPTS) {
-            const remainingTime = Math.ceil((LOCKOUT_TIME - (now - attempts.firstAttempt)) / 60000);
-            throw new Error(`Çok fazla başarısız deneme. ${remainingTime} dakika sonra tekrar deneyin.`);
-          }
+          return null;
         }
 
         const user = await prisma.user.findUnique({
@@ -72,29 +57,21 @@ export const authOptions: NextAuthOptions = {
           }
         });
 
-        if (!user) {
-          // Başarısız denemeyi kaydet
-          updateLoginAttempts(credentials.email);
-          throw new Error('Kullanıcı bulunamadı');
+        if (!user || !user.password) {
+          return null;
         }
 
         const isPasswordValid = await compare(credentials.password, user.password);
 
         if (!isPasswordValid) {
-          // Başarısız denemeyi kaydet
-          updateLoginAttempts(credentials.email);
-          throw new Error('Geçersiz şifre');
+          return null;
         }
-
-        // Başarılı giriş - denemeleri sıfırla
-        loginAttempts.delete(credentials.email);
 
         return {
           id: user.id,
           email: user.email,
-          name: user.username,
           username: user.username,
-          role: user.role,
+          role: user.role
         };
       }
     })
@@ -102,45 +79,28 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
+        token.role = (user as any).role;
+        token.username = (user as any).username;
         token.id = user.id;
-        token.username = user.username;
       }
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        session.user.role = token.role;
-        session.user.id = token.id;
+      if (token && session.user) {
+        session.user.role = token.role as Role;
+        session.user.username = token.username as string;
+        session.user.id = token.id as string;
       }
       return session;
     }
   },
   pages: {
-    signIn: '/(auth)/login',
-    signOut: '/(auth)/logout',
-    error: '/(auth)/error',
+    signIn: '/auth/giris',
+    error: '/auth/giris',
   },
   session: {
-    strategy: 'jwt',
-    maxAge: 24 * 60 * 60, // 1 gün
-    updateAge: 6 * 60 * 60, // 6 saat
+    strategy: 'jwt' as const,
   },
-  jwt: {
-    maxAge: 24 * 60 * 60, // 1 gün
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  cookies: {
-    sessionToken: {
-      name: process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token',
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-      }
-    }
-  }
 };
 
 // Rate limiting yardımcı fonksiyonu

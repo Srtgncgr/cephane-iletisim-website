@@ -4,7 +4,7 @@ import { prisma } from '@/app/lib/prisma';
 import { authOptions } from '@/app/lib/auth';
 
 // Dashboard istatistikleri (Sadece admin)
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'ADMIN') {
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
           user: {
             select: {
               id: true,
-              name: true
+              username: true
             }
           }
         }

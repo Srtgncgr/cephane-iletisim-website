@@ -202,5 +202,25 @@ input:focus, textarea:focus, select:focus {
 .rounded-lg { border-radius: var(--border-radius-lg); }
 .rounded-full { border-radius: var(--border-radius-full); }
 
-.shadow { box-shadow: var(--shadow-md); }
-.shadow-lg { box-shadow: var(--shadow-lg); } 
+  .shadow { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+
+/* Admin sayfası global selectorları */
+.admin-page body > header,
+.admin-page body > div > header,
+.admin-page body > footer,
+.admin-page body > div > footer {
+  display: none !important;
+}
+
+.admin-page body,
+.admin-page html {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.admin-page body > div {
+  margin: 0 !important;
+  padding: 0 !important;
+} 

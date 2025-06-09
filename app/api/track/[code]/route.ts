@@ -24,12 +24,13 @@ type ServiceRequest = {
 // Takip kodu ile servis talebi sorgulama
 export async function GET(
   request: Request,
-  { params }: { params: { code: string } }
+  { params }: { params: Promise<{ code: string }> }
 ) {
   try {
+    const { code } = await params;
     const serviceRequest = await prisma.serviceRequest.findUnique({
       where: {
-        trackingCode: params.code
+        trackingCode: code
       },
       select: {
         deviceType: true,

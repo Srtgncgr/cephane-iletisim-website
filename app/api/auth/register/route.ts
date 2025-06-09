@@ -8,27 +8,27 @@ export async function POST(request: Request) {
 
     // Validasyonlar
     if (!email || !password || !username) {
-      return new NextResponse('Tüm alanlar zorunludur', { status: 400 });
+      return NextResponse.json({ error: 'Tüm alanlar zorunludur' }, { status: 400 });
     }
 
     if (password.length < 6) {
-      return new NextResponse('Şifre en az 6 karakter olmalıdır', { status: 400 });
+      return NextResponse.json({ error: 'Şifre en az 6 karakter olmalıdır' }, { status: 400 });
     }
 
     // Kullanıcı adı validasyonu
     if (username.length < 3) {
-      return new NextResponse('Kullanıcı adı en az 3 karakter olmalıdır', { status: 400 });
+      return NextResponse.json({ error: 'Kullanıcı adı en az 3 karakter olmalıdır' }, { status: 400 });
     }
 
     const usernameRegex = /^[a-zA-Z0-9_-]+$/;
     if (!usernameRegex.test(username)) {
-      return new NextResponse('Kullanıcı adı sadece harf, rakam, alt çizgi ve tire içerebilir', { status: 400 });
+      return NextResponse.json({ error: 'Kullanıcı adı sadece harf, rakam, alt çizgi ve tire içerebilir' }, { status: 400 });
     }
 
     // Email formatı kontrolü
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return new NextResponse('Geçersiz email formatı', { status: 400 });
+      return NextResponse.json({ error: 'Geçersiz email formatı' }, { status: 400 });
     }
 
     // Email ve kullanıcı adı kullanımda mı kontrolü
@@ -43,10 +43,10 @@ export async function POST(request: Request) {
 
     if (existingUser) {
       if (existingUser.email === email) {
-        return new NextResponse('Bu email adresi zaten kullanımda', { status: 400 });
+        return NextResponse.json({ error: 'Bu email adresi zaten kullanımda' }, { status: 400 });
       }
       if (existingUser.username === username) {
-        return new NextResponse('Bu kullanıcı adı zaten kullanımda', { status: 400 });
+        return NextResponse.json({ error: 'Bu kullanıcı adı zaten kullanımda' }, { status: 400 });
       }
     }
 
@@ -80,12 +80,12 @@ export async function POST(request: Request) {
       'code' in error &&
       error.code === 'P2002'
     ) {
-      return new NextResponse(
-        'Bu email adresi veya kullanıcı adı zaten kullanımda',
+      return NextResponse.json(
+        { error: 'Bu email adresi veya kullanıcı adı zaten kullanımda' },
         { status: 400 }
       );
     }
     
-    return new NextResponse('Sunucu hatası', { status: 500 });
+    return NextResponse.json({ error: 'Sunucu hatası' }, { status: 500 });
   }
 } 
